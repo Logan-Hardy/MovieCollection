@@ -1,0 +1,43 @@
+﻿@{
+    ViewData["Title"] = "Movies";
+}
+
+@*@model IEnumerable<MovieCollection.Models.Movie>*@
+
+<div class="text-center">
+    <h1 class="display-4">@ViewBag.Title</h1>
+    <br />
+
+    <table>
+        <thead>
+            <tr>
+                <!--Table header-->
+                <th>Category</th>
+                <th>Title</th>
+                <th>Year</th>
+                <th>Director</th>
+                <th>Rating</th>
+                <th>Edited</th>
+                <th>Lent To</th>
+                <th>Notes</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var movie in Model.Movies)
+            {
+                <tr>
+                    <!--Table row for each movie details-->
+                    <td>@movie.Category</td>
+                    <td>@movie.MovieTitle</td>
+                    <td>@movie.Year</td>
+                    <td>@movie.Director</td>
+                    <td>@movie.Rating</td>
+                    <td>@movie.Edited</td>
+                    <td>@movie.LentTo</td>
+                    <td>@movie.Notes</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

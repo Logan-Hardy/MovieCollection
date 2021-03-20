@@ -1,0 +1,56 @@
+﻿@{
+    ViewData["Title"] = "Add Movie";
+}
+@model MovieCollection.Models.Movie
+
+<div class="text-center">
+    <h1 class="display-4">Add a Movie</h1>
+</div>
+
+<div class="container">
+    <form asp-action="AddMovie" method="post">
+        <fieldset>
+            <label asp-for="Category">Category</label>
+            <input asp-for="Category" />
+            <br />
+            <label asp-for="MovieTitle">Title</label>
+            <input asp-for="MovieTitle" />
+            <br />
+            <label asp-for="Year">Year</label>
+            <input asp-for="Year" />
+            <br />
+            <label asp-for="Director">Director</label>
+            <input asp-for="Director" />
+            <br />
+            <label asp-for="Rating">Rating</label>
+            <select asp-for="Rating">
+                <option value="">Select One</option>
+                <option value="G">G</option>
+                <option value="PG">PG</option>
+                <option value="PG-13">PG-13</option>
+                <option value="R">R</option>
+            </select>
+            <br />
+            <label asp-for="Edited">Edited</label>
+            <select asp-for="Edited">
+                <option value="">Select One</option>
+                <option value="True">Yes</option>
+                <option value="False">No</option>
+            </select>
+            <br />
+            <label asp-for="LentTo">Lent To</label>
+            <input asp-for="LentTo" />
+            <br />
+            <label asp-for="Notes">Notes</label>
+            <input asp-for="Notes" />
+            <br />
+            <br />
+            <br />
+
+            <button type="submit">Add Movie</button>
+            <br />
+            <div asp-validation-summary="All"></div>
+        </fieldset>
+    </form>
+
+</div>
