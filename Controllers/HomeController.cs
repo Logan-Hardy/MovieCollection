@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MovieCollection.Models;
+using MovieCollection.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -39,7 +40,22 @@ namespace MovieCollection.Controllers
         [HttpPost]
         public IActionResult AddMovie(Movie movie)
         {
-            //if ()
+            //Here is where we need to create the object with the model
+            if (ModelState.IsValid)
+            {
+                _context.Movies.Add(movie);
+                _context.SaveChanges();
+
+                return RedirectToAction("Confirmation");
+            }
+            else
+            {
+               return View("AddMovie", movie);
+            }
+        }
+
+        public IActionResult Confirmation()
+        {
             return View();
         }
 
@@ -67,9 +83,23 @@ namespace MovieCollection.Controllers
             return View();
         }
 
-        public IActionResult MovieList()
+        [HttpGet]
+        public IActionResult MovieList(int pageNum)
         {
-            return View();
+            return View(new MovieListViewModel
+            {
+                Movies = _repository.Movies
+                .OrderBy(p => p.MovieTitle)
+                .Skip((pageNum - 1) * ItemsPerPage)
+                .Take(ItemsPerPage),
+
+                PagingInfo = new PagingInfo
+                {
+                    CurrentPage = pageNum,
+                    ItemsPerPage = ItemsPerPage,
+                    TotalNumItems = _repository.Movies.Count()
+                }
+            });
         }
 
         public IActionResult Podcasts()
