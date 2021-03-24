@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "Movies";
+    ViewData["Title"] = "Movie List";
 }
 
 @model MovieCollection.Models.ViewModels.MovieListViewModel
@@ -20,6 +20,8 @@
                 <th>Edited</th>
                 <th>Lent To</th>
                 <th>Notes</th>
+                <th>Edit</th>
+                <th>Delete</th>
             </tr>
         </thead>
         <tbody>
@@ -36,6 +38,20 @@
                     <td>@movie.Edited</td>
                     <td>@movie.LentTo</td>
                     <td>@movie.Notes</td>
+                    <td>
+                        <form method="post" asp-action="MovieList" asp-controller="home">
+                            <input type="hidden" name="MovieId" value="@movie.MovieId" />
+                            <input type="hidden" name="actionType" value="Edit" />
+                            <button type="submit" class="btn btn-sm btn-warning">Edit</button>
+                        </form>
+                    </td>
+                    <td>
+                        <form method="post" asp-action="MovieList" asp-controller="home">
+                            <input type="hidden" name="MovieId" value="@movie.MovieId" />
+                            <input type="hidden" name="actionType" value="Delete" />
+                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                        </form>
+                    </td>
                 </tr>
             }
         </tbody>
@@ -45,6 +61,7 @@
     <div page-model="@Model.PagingInfo" page-action="MovieList" page-classes-enabled="true" page-class="btn"
          page-class-normal="btn-outline-dark"
          page-class-selected="btn-primary"
-         class="btn-group pull-right m-1"></div>
+         class="btn-group pull-right m-1">
+    </div>
 
 </div>

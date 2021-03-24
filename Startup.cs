@@ -33,6 +33,8 @@ namespace MovieCollection
             });
 
             services.AddScoped<iMovieRepository, EFMovieRepository>();
+
+            services.AddRazorPages();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -60,6 +62,31 @@ namespace MovieCollection
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+                endpoints.MapControllerRoute(
+                    "Movies",
+                    "Home/MovieList/{pageNum:int}",
+                    new { Controller = "Home", action = "MovieList" });
+
+                endpoints.MapControllerRoute(
+                    "MoviePages",
+                    "Home/MovieList/P{pageNum:int}",
+                    new { Controller = "Home", action = "MovieList" });
+
+                endpoints.MapControllerRoute(
+                    "pagination",
+                    //display urls as /P1, /P2, /P3, etc. 
+                    "P{pageNum}",
+                    new { Controller = "Home", action = "MovieList" });
+
+                endpoints.MapControllerRoute(
+                    "pageNum",
+                    "{pageNum:int}",
+                    new { Controller = "Home", action = "MovieList" });
+
+                endpoints.MapDefaultControllerRoute();
+
+                endpoints.MapRazorPages();
             });
 
             SeedData.EnsurePopulated(app);

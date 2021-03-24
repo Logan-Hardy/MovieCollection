@@ -17,7 +17,7 @@ namespace MovieCollection.Controllers
         private iMovieRepository _repository;
         private MovieDbContext _context;
 
-        public int ItemsPerPage = 10;   
+        public int ItemsPerPage = 10;
 
         public HomeController(ILogger<HomeController> logger, iMovieRepository repository, MovieDbContext context)
         {
@@ -46,7 +46,7 @@ namespace MovieCollection.Controllers
                 _context.Movies.Add(movie);
                 _context.SaveChanges();
 
-                return RedirectToAction("Confirmation");
+                return RedirectToAction("AddConfirmation");
             }
             else
             {
@@ -54,37 +54,21 @@ namespace MovieCollection.Controllers
             }
         }
 
-        public IActionResult Confirmation()
+        public IActionResult AddConfirmation()
         {
-            return View();
+            return View("Confirmation");
+        }
+        public IActionResult EditConfirmation()
+        {
+            return View("Confirmation");
+        }
+        public IActionResult DeleteConfirmation()
+        {
+            return View("Confirmation");
         }
 
         [HttpGet]
-        public IActionResult FindMovieToEdit()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public IActionResult FindMovieToEdit(int MovieId)
-        {
-            return View();
-        }
-
-        [HttpGet]
-        public IActionResult EditMovie()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public IActionResult EditMovie(Movie movie)
-        {
-            return View();
-        }
-
-        [HttpGet]
-        public IActionResult MovieList(int pageNum)
+        public IActionResult FindMovieToEdit(int pageNum)
         {
             return View(new MovieListViewModel
             {
@@ -100,6 +84,92 @@ namespace MovieCollection.Controllers
                     TotalNumItems = _repository.Movies.Count()
                 }
             });
+        }
+
+        [HttpPost]
+        public IActionResult FindMovieToEdit(int movieId, string actionType)
+        {
+            //ViewBag["actionType"] = actionType;
+            if (actionType == "Edit")
+            {
+                var EditMovie = _context.Movies.Where(m => m.MovieId == movieId).FirstOrDefault();
+                return View("EditMovie", EditMovie);
+            }
+            else if (actionType == "Delete")
+            {
+                _context.Remove(_context.Movies.Where(m => m.MovieId == movieId).FirstOrDefault());
+                _context.SaveChanges();
+                return View("DeleteConfirmation");
+            }
+            else
+            {
+                return View();
+            }
+       
+        }
+
+        [HttpGet]
+        public IActionResult EditMovie()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult EditMovie(Movie movie)
+        {
+
+            //Here is where we need to create the object with the model
+            if (ModelState.IsValid)
+            {
+                _context.Movies.Update(movie);
+                _context.SaveChanges();
+
+                return RedirectToAction("EditConfirmation");
+            }
+            else
+            {
+                return View("EditMovie", movie);
+            }
+        }
+
+        [HttpGet]
+        public IActionResult MovieList(int pageNum = 1)
+        {
+            return View(new MovieListViewModel
+            {
+                Movies = _repository.Movies
+                .OrderBy(p => p.MovieTitle)
+                .Skip((pageNum - 1) * ItemsPerPage)
+                .Take(ItemsPerPage),
+
+                PagingInfo = new PagingInfo
+                {
+                    CurrentPage = pageNum,
+                    ItemsPerPage = ItemsPerPage,
+                    TotalNumItems = _repository.Movies.Count()
+                }
+            });
+        }
+
+        [HttpPost]
+        public IActionResult MovieList(int movieId, string actionType)
+        {
+            if (actionType == "Edit")
+            {
+                var EditMovie = _context.Movies.Where(m => m.MovieId == movieId).FirstOrDefault();
+                return View("EditMovie", EditMovie);
+            }
+            else if (actionType == "Delete")
+            {
+                _context.Remove(_context.Movies.Where(m => m.MovieId == movieId).FirstOrDefault());
+                _context.SaveChanges();
+                return View("DeleteConfirmation");
+            }
+            else
+            {
+                return View();
+            }
+
         }
 
         public IActionResult Podcasts()
