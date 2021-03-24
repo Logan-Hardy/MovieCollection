@@ -82,3 +82,16 @@ table.dataTable thead .sorting_desc_disabled:after,
 table.dataTable thead .sorting_desc_disabled:before {
     bottom: .5em;
 }
+
+
+label {
+    font-size: 20px;
+    font-weight: 600;
+    width: 100px;
+    Display: inline-block;
+}
+
+input {
+    width: 100px;
+}
+

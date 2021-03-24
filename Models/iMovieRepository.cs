@@ -7,6 +7,7 @@ namespace MovieCollection.Models
 {
     public interface iMovieRepository
     {
+        //Allows user to obtain a sequence of Movie objects
         IQueryable<Movie> Movies { get; }
 
     }

@@ -13,6 +13,7 @@ namespace MovieCollection.Models.ViewModels
 
         public int CurrentPage { get; set; }
 
+        //calculate TotalPages each time it's called (needs to be an integer) 
         public int TotalPages => (int)(Math.Ceiling((decimal)TotalNumItems / ItemsPerPage));
     }
 }

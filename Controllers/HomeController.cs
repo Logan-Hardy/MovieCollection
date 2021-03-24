@@ -40,72 +40,37 @@ namespace MovieCollection.Controllers
         [HttpPost]
         public IActionResult AddMovie(Movie movie)
         {
-            //Here is where we need to create the object with the model
+            //Check for validity
             if (ModelState.IsValid)
             {
+
+                //Here is where we need to create the object with the model
                 _context.Movies.Add(movie);
                 _context.SaveChanges();
 
+                //Redirect to confirmation page, saying the movie has been added
                 return RedirectToAction("AddConfirmation");
             }
             else
             {
-               return View("AddMovie", movie);
+                //if model isn't valid, return to the same view and send back the movie info they inputted
+                //this makes it easier so they don't have to repeat the info and can make the change(s) they need to 
+                return View("AddMovie", movie);
             }
         }
 
+        //Confirmations 
         public IActionResult AddConfirmation()
         {
-            return View("Confirmation");
+            return View();
         }
         public IActionResult EditConfirmation()
         {
-            return View("Confirmation");
+            return View();
         }
         public IActionResult DeleteConfirmation()
         {
-            return View("Confirmation");
-        }
-
-        [HttpGet]
-        public IActionResult FindMovieToEdit(int pageNum)
-        {
-            return View(new MovieListViewModel
-            {
-                Movies = _repository.Movies
-                .OrderBy(p => p.MovieTitle)
-                .Skip((pageNum - 1) * ItemsPerPage)
-                .Take(ItemsPerPage),
-
-                PagingInfo = new PagingInfo
-                {
-                    CurrentPage = pageNum,
-                    ItemsPerPage = ItemsPerPage,
-                    TotalNumItems = _repository.Movies.Count()
-                }
-            });
-        }
-
-        [HttpPost]
-        public IActionResult FindMovieToEdit(int movieId, string actionType)
-        {
-            //ViewBag["actionType"] = actionType;
-            if (actionType == "Edit")
-            {
-                var EditMovie = _context.Movies.Where(m => m.MovieId == movieId).FirstOrDefault();
-                return View("EditMovie", EditMovie);
-            }
-            else if (actionType == "Delete")
-            {
-                _context.Remove(_context.Movies.Where(m => m.MovieId == movieId).FirstOrDefault());
-                _context.SaveChanges();
-                return View("DeleteConfirmation");
-            }
-            else
-            {
-                return View();
-            }
-       
+            return View();
         }
 
         [HttpGet]
@@ -117,10 +82,10 @@ namespace MovieCollection.Controllers
         [HttpPost]
         public IActionResult EditMovie(Movie movie)
         {
-
-            //Here is where we need to create the object with the model
+            //Check for validity
             if (ModelState.IsValid)
             {
+                //update the context with changes made to the movie
                 _context.Movies.Update(movie);
                 _context.SaveChanges();
 
@@ -156,11 +121,13 @@ namespace MovieCollection.Controllers
         {
             if (actionType == "Edit")
             {
+                //if user wants to edit a movie, pass that movie information to the EditMovie 
                 var EditMovie = _context.Movies.Where(m => m.MovieId == movieId).FirstOrDefault();
                 return View("EditMovie", EditMovie);
             }
             else if (actionType == "Delete")
             {
+                //if user wants to delete a movie, remove it from context by MovieId
                 _context.Remove(_context.Movies.Where(m => m.MovieId == movieId).FirstOrDefault());
                 _context.SaveChanges();
                 return View("DeleteConfirmation");

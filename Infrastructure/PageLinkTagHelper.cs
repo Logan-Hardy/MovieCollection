@@ -42,6 +42,7 @@ namespace MovieCollection.Infrastructure
         //Overriding 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
+
             IUrlHelper urlHelper = urlHelperFactory.GetUrlHelper(ViewContext);
 
             TagBuilder result = new TagBuilder("div");
